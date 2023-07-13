@@ -34,26 +34,18 @@ router.get('/', async (req, res, next) => {
 })
 
 router.get('/:contactId', async (req, res, next) => {
-  // res.json({ message: 'template message' })
+  
   try {
-    const { contactId } = req.params
-    const result = await contacts.getContactById(contactId)
+    const { id } = req.params
+    const result = await contacts.getContactById(id)
     if (!result) {
       throw HttpError(404, "Not found")
-      // const error = new Error("Not found")
-      // error.status = 404
-      // throw error
-      // return res.status(404).json({
-      //   message: "Not found"
-      // })
+      
     }
     res.json(result)
   } catch (error) {
     next(error)
-    // const { status = 500, message = "Server error" } = error
-    // res.status(status).json({
-    //   message,
-    // })
+    
   }
 })
 
@@ -61,13 +53,7 @@ router.post('/', async (req, res, next) => {
   try {
     const { error } = addShema.validate(req.body)
     if (error) {
-      // const missingKey = error.details[0].path[0];
-      // const missingKey = 
-      //  `missing required ${error.details[0].path[0]} field`
-      ;// Получение имени ключа
-      // console.log(missingKey);
-
-      // throw HttpError (400, missingKey)
+      
       throw HttpError(400, error.message)
     }
     const result = await contacts.addContact(req.body)
@@ -80,6 +66,11 @@ router.post('/', async (req, res, next) => {
 
 router.put('/:contactId', async (req, res, next) => {
   try {
+// console.log(req.body)
+if (Object.keys(req.body).length === 0) {
+  throw HttpError(400, "missing fields");
+}
+
     const { error } = addShema.validate(req.body)
     if (error) {
       throw HttpError(400, error.message)
@@ -99,8 +90,10 @@ router.put('/:contactId', async (req, res, next) => {
 router.delete('/:contactId', async (req, res, next) => {
   try {
     const { contactId } = req.params;
+    console.log(req.params.contactId)
     const result = await contacts.removeContact(contactId)
     if (!result) {
+      console.log(result)
       throw HttpError(404, "Not found")
     }
     res.json({
