@@ -13,4 +13,6 @@ const addShema = Joi.object({
 
 })
 
-module.exports = addShema
+module.exports = {
+  addShema,
+}
