@@ -1,15 +1,17 @@
-const contacts = require('../models/contacts')
+// const contacts = require('../models/contacts')
 const { ctrlWrapper, HttpError } = require('../helpers')
-
+// const { ctrlWrapper} = require('../helpers')
+const Contact = require('../models/contact')
 
 const getContacts = async (req, res, next) => {
-  const result = await contacts.listContacts()
+  const result = await Contact.find(); // метод find повертає всі елементи колекції
   res.json(result)
 }
 
 const getById = async (req, res, next) => {
   const { contactId } = req.params
-  const result = await contacts.getContactById(contactId)
+  // const result = await Contact.findOne(_id: contactId)
+  const result = await Contact.findById(contactId)
   if (!result) {
     throw HttpError(404, "Not found")
   }
@@ -17,13 +19,13 @@ const getById = async (req, res, next) => {
 }
 
 const postContact = async (req, res, next) => {
-  const result = await contacts.addContact(req.body)
+  const result = await Contact.create(req.body) // метод create додає елемент колекції
   res.status(201).json(result)
 }
 
 const deleteById = async (req, res, next) => {
   const { contactId } = req.params;
-  const result = await contacts.removeContact(contactId)
+  const result = await Contact.findByIdAndRemove(contactId)
   if (!result) {
     throw HttpError(404, "Not found")
   }
@@ -34,12 +36,21 @@ const deleteById = async (req, res, next) => {
 
 const putContact = async (req, res, next) => {
   const { contactId } = req.params;
-  const result = await contacts.updateContact(contactId, req.body)
-  console.log(result)
+  const result = await Contact.findByIdAndUpdate(contactId, req.body, {new: true})
+  // console.log(result)
   if (!result) {
     throw HttpError(404, "Not found")
   }
   res.json(result)
+}
+
+const updateStatusContact  = async (req, res) => {
+  const { contactId } = req.params;
+  const result = await Contact.findByIdAndUpdate(contactId, req.body, {new: true});
+  if (!result) {
+      throw HttpError(404, "Not found");
+  }
+  res.json(result);
 }
 
 module.exports = {
@@ -48,5 +59,6 @@ module.exports = {
   deleteById: ctrlWrapper(deleteById),
   postContact: ctrlWrapper(postContact),
   getById: ctrlWrapper(getById),
+  updateStatusContact: ctrlWrapper(updateStatusContact),
 }
 
