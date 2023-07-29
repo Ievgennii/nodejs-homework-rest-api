@@ -10,8 +10,15 @@ const {
 	deleteById,
 } = require("../../controllers/contacts");
 // const { deleteById, getContacts, getById, postContact, putContact } = require("../../controllers/contacts")
-const { validation, isValidId, isValidFavorite } = require("../../middlewars");
+const {
+	authenticate,
+	validation,
+	isValidId,
+	isValidFavorite,
+} = require("../../middlewars");
 const schemas = require("../../schemas/contats");
+
+router.use(authenticate);
 
 router.get("/", getContacts);
 

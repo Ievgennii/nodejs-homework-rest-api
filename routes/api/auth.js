@@ -3,7 +3,7 @@ const authCtrl = require("../../controllers/auth");
 
 const router = express.Router();
 
-const { validation } = require("../../middlewars");
+const { validation, authenticate } = require("../../middlewars");
 // const { validation, isValidId, isValidFavorite } = require("../../middlewars");
 
 const schemas = require("../../schemas/users");
@@ -15,5 +15,9 @@ router.post(
 );
 
 router.post("/login", validation(schemas.userSignupSchema), authCtrl.login);
+
+router.get("/current", authenticate, authCtrl.getCurrent);
+
+router.post("/logout", authenticate, authCtrl.logout);
 
 module.exports = router;
