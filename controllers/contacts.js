@@ -4,16 +4,28 @@ const { ctrlWrapper, HttpError } = require("../helpers");
 const Contact = require("../models/contact");
 
 const getContacts = async (req, res, next) => {
-	const { _id: owner } = req.user;
+	// const { _id: owner } = req.user;
 	// const { page = 1, limit = 20, ...query } = req.query;
 	// const skip = (page - 1) * limit;
 
-	const result = await Contact.find({ owner });
+	// const result = await Contact.find({ owner });
 
 	// const result = await Contact.find(
 	// 	{ owner, ...query },
 	// 	{ skip, limit }
 	// ).populate("owner", "email"); // метод find повертає всі елементи колекції
+	// 	res.json(result);
+	// };
+
+	const { _id: owner } = req.user;
+	const { page = 1, limit = 20, favorite = null } = req.query;
+	const query = favorite ? { owner, favorite } : { owner };
+
+	const skip = (page - 1) * limit;
+	const result = await Contact.find(query, "-createdAt -updatedAt", {
+		skip,
+		limit,
+	});
 	res.json(result);
 };
 
