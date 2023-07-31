@@ -7,7 +7,7 @@ const { HttpError } = require("../helpers");
 require("dotenv").config();
 
 const { SECRET_KEY } = process.env;
-console.log(SECRET_KEY);
+// console.log(SECRET_KEY);
 
 const authenticate = async (req, res, next) => {
 	const { authorization = "" } = req.headers;
