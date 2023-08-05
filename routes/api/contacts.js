@@ -15,6 +15,7 @@ const {
 	validation,
 	isValidId,
 	isValidFavorite,
+	// upload,
 } = require("../../middlewars");
 const schemas = require("../../schemas/contats");
 
@@ -24,7 +25,14 @@ router.get("/", getContacts);
 
 router.get("/:contactId", isValidId, getById);
 
-router.post("/", validation(schemas.addShema), postContact);
+// upload.fields([{name: "avatar", maxCount: 1}])
+// upload.array("avatar", 8)
+router.post(
+	"/",
+	// upload.single("avatar"),
+	validation(schemas.addShema),
+	postContact
+);
 
 router.put("/:contactId", isValidId, validation(schemas.addShema), putContact);
 
