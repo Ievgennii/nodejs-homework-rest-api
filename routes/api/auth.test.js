@@ -45,6 +45,8 @@ describe("test register route", () => {
 			.post("/users/register")
 			.send(signupData);
 
+		console.log(body);
+
 		expect(statusCode).toBe(201);
 		expect(body.user.email).toBe(signupData.email);
 		expect(body.user.subscription).toBe("starter");

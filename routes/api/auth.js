@@ -34,4 +34,12 @@ router.patch(
 	authCtrl.updateAvatar
 );
 
+router.get("/verify/:verificationToken", authCtrl.verify);
+
+router.post(
+	"/verify",
+	validation(schemas.userEmailSchema),
+	authCtrl.resendVerify
+);
+
 module.exports = router;
